@@ -1,0 +1,322 @@
+.intro_items {
+    margin-bottom: 100px;
+}
+
+.intro_col {
+    margin-bottom: 30px;
+}
+
+/* Slider địa điểm nổi bật: nội dung mọi slide cao bằng nhau */
+.cta_title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cta_text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    min-height: 160px;   /* dự phòng cho trình duyệt cũ */
+    min-height: 4lh;     /* đúng 4 dòng chữ, theo cỡ chữ thật */
+}
+
+/* ===== Live search ===== */
+.ls_results
+{
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background: #fff;
+	z-index: 1000;
+	max-height: 360px;
+	overflow-y: auto;
+	box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.ls_item
+{
+	display: flex;
+	align-items: center;
+	padding: 8px 12px;
+	color: #333;
+	border-bottom: 1px solid #eee;
+}
+.ls_item:hover { background: #f5f0fa; text-decoration: none; }
+.ls_item img { width: 48px; height: 48px; object-fit: cover; margin-right: 12px; }
+.ls_text strong { display: block; font-size: 16px; }
+.ls_text small { color: #000000; }
+.ls_empty { padding: 12px; color: #000000; }
+
+/* ===== Contact form message ===== */
+#contact_msg
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+/* ===== Home search panel (1 keyword field) ===== */
+.search_panel_content .keyword_item
+{
+	flex: 1;
+	width: auto;
+	margin-right: 30px;
+}
+
+
+/* Chữ phụ của Bootstrap (.text-muted) cũng dùng màu đen thay vì xám */
+.text-muted { color: #000000 !important; }
+
+/* =====================================================================
+   PHẦN THÂN CÁC TRANG CON: tách khỏi banner (giống trang reviews)
+   Dùng: thêm class "page_body" vào khối nội dung ngay dưới banner.
+   ===================================================================== */
+.page_body
+{
+	background: #f7f5fa;
+	border-top: 4px solid #fa9e1b;
+	padding-top: 90px !important;
+	padding-bottom: 100px !important;
+}
+
+/* ----- Khung trắng dùng chung ----- */
+.info_card,
+.form_card,
+.page_body .single_listing,
+.page_body .offers_item,
+.page_body .blog_post,
+.page_body .sidebar_latest_posts,
+.page_body .card
+{
+	background: #FFFFFF;
+	border: none;
+	border-radius: 8px;
+	box-shadow: 0 6px 24px rgba(49, 18, 75, 0.08);
+}
+.info_card { overflow: hidden; }
+.info_card_image
+{
+	display: block;
+	width: 100%;
+	height: 260px;
+	object-fit: cover;
+}
+.info_card_body { padding: 24px 28px 28px; }
+.info_card_title
+{
+	font-size: 26px;
+	font-weight: 700;
+	color: #2d2c2c;
+	margin-bottom: 8px;
+}
+.info_card_text { color: #000000; margin-bottom: 10px; }
+.info_card_link { display: inline-block; margin-top: 4px; color: #fa9e1b; font-weight: 600; }
+.info_card_link:hover { color: #31124b; }
+
+.form_card { padding: 36px 40px 40px; }
+.form_card_title
+{
+	font-size: 26px;
+	font-weight: 700;
+	color: #2d2c2c;
+	margin-bottom: 12px;
+}
+.form_card_note
+{
+	color: #000000;
+	margin-bottom: 24px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #ece8f1;
+}
+
+/* ----- Chi tiết địa điểm / khách sạn ----- */
+.page_body .single_listing { padding: 48px 56px 56px; }
+
+/* ----- Category: mỗi địa điểm là 1 khung ----- */
+.page_body .offers_sorting_container { margin-top: 0; }
+.page_body .offers_grid { margin-top: 40px; }
+.page_body .offers_item { padding: 24px; margin-bottom: 30px; }
+.page_body .offers_item.offers_empty { padding: 40px 24px; }
+
+/* ----- Tin tức / bài viết ----- */
+.page_body .blog_post { padding: 0 0 32px; margin-bottom: 40px; overflow: hidden; }
+.page_body .blog_post > :not(.blog_post_image) { margin-left: 32px; margin-right: 32px; }
+.page_body .blog_post .post_detail_back { padding-top: 28px; }
+.page_body .sidebar_latest_posts { margin-top: 0; padding: 28px; }
+
+/* ----- Tìm kiếm ----- */
+.page_body .card { overflow: hidden; }
+
+@media only screen and (min-width: 992px)
+{
+	/* Khung thông tin đứng yên khi cuộn form dài */
+	.page_body .info_card { position: sticky; top: 120px; }
+}
+@media only screen and (max-width: 991px)
+{
+	.page_body .single_listing { padding: 32px 24px 40px; }
+}
+@media only screen and (max-width: 767px)
+{
+	.page_body { padding-top: 50px !important; padding-bottom: 60px !important; }
+	.form_card { padding: 24px 20px 28px; }
+	.info_card_image { height: 200px; }
+	.page_body .blog_post > :not(.blog_post_image) { margin-left: 20px; margin-right: 20px; }
+}
+
+/* =====================================================================
+   HIỆU ỨNG PHÓNG TO ẢNH KHI RÊ CHUỘT
+   Khung ngoài cắt phần thừa (overflow: hidden), ảnh bên trong phóng to 1.08.
+   ===================================================================== */
+.offers_image_container,
+.hotel_image,
+.room_image,
+.blog_post_image,
+.latest_post_image,
+.trending_image,
+.intro_item,
+.post_detail_image,
+.footer_blog_image,
+.info_card,
+.page_body .card
+{
+	overflow: hidden;
+}
+.offers_image_container,
+.intro_item
+{
+	position: relative;
+}
+.offers_image_background,
+.hotel_image img,
+.room_image img,
+.blog_post_image img,
+.latest_post_image img,
+.trending_image img,
+.intro_item_background,
+.post_detail_image img,
+.footer_blog_image img,
+.info_card_image,
+.page_body .card-img-top
+{
+	transition: transform 0.6s ease;
+	will-change: transform;
+}
+.offers_image_container:hover .offers_image_background,
+.hotel_image:hover img,
+.room_image:hover img,
+.blog_post_image:hover img,
+.latest_post_image:hover img,
+.trending_image:hover img,
+.intro_item:hover .intro_item_background,
+.post_detail_image:hover img,
+.footer_blog_image:hover img,
+.info_card:hover .info_card_image,
+.page_body .card:hover .card-img-top
+{
+	transform: scale(1.08);
+}
+/* Nhãn/ngày nằm trên ảnh phải luôn ở trên lớp ảnh đang phóng to */
+.offer_name,
+.blog_post_date,
+.hotel_review_container
+{
+	z-index: 3;
+}
+@media (prefers-reduced-motion: reduce)
+{
+	.offers_image_background, .hotel_image img, .room_image img, .blog_post_image img,
+	.latest_post_image img, .trending_image img, .intro_item_background, .post_detail_image img,
+	.footer_blog_image img, .info_card_image, .page_body .card-img-top
+	{ transition: none; }
+}
+
+/* =====================================================================
+   TRANG CHI TIẾT KHÁCH SẠN: album, tiện ích, FAQ
+   ===================================================================== */
+.hotel_rating_count { margin-left: 12px; color: #000000; font-size: 15px; }
+.hotel_location i { width: 18px; color: #fa9e1b; }
+.hotel_album
+{
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 12px;
+	margin-top: 16px;
+}
+.hotel_album_item
+{
+	display: block;
+	aspect-ratio: 4 / 3;
+	border-radius: 6px;
+	overflow: hidden;
+}
+.hotel_album_item img
+{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.6s ease;
+}
+.hotel_album_item:hover img { transform: scale(1.08); }
+.hotel_section { margin-top: 48px; }
+.hotel_amenities
+{
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 10px 24px;
+	margin-top: 24px;
+	padding: 0;
+	list-style: none;
+}
+.hotel_amenities li { color: #000000; }
+.hotel_amenities i { color: #fa9e1b; margin-right: 6px; }
+.hotel_faqs { margin-top: 24px; }
+.hotel_faq
+{
+	border: 1px solid #ece8f1;
+	border-radius: 6px;
+	padding: 14px 18px;
+	margin-bottom: 12px;
+	background: #FFFFFF;
+}
+.hotel_faq summary
+{
+	cursor: pointer;
+	font-weight: 600;
+	color: #2d2c2c;
+	list-style-position: inside;
+}
+.hotel_faq[open] summary { color: #fa9e1b; margin-bottom: 8px; }
+.hotel_faq p { margin: 0; color: #000000; }
+
+.hotel_amenities_total { font-size: 15px; color: #000000; text-transform: none; }
+.hotel_amenities li.is_extra { display: none; }
+.hotel_amenities.is_open li.is_extra { display: list-item; }
+.hotel_amenities_toggle
+{
+	margin-top: 18px;
+	padding: 8px 22px;
+	border: 2px solid #fa9e1b;
+	border-radius: 30px;
+	background: transparent;
+	color: #fa9e1b;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+.hotel_amenities_toggle:hover { background: #fa9e1b; color: #FFFFFF; }
+
+/* Dòng ghi nguồn cho nội dung crawl (CC BY-SA) */
+.source_credit
+{
+	margin-top: 24px;
+	padding: 12px 16px;
+	border-left: 3px solid #fa9e1b;
+	background: #fbf9fd;
+	font-size: 14px;
+	color: #000000;
+	line-height: 1.6;
+}
+.source_credit i { color: #fa9e1b; margin-right: 4px; }
+.source_credit a { color: #fa9e1b; font-weight: 600; }
