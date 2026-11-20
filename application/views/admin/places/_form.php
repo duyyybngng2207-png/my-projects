@@ -1,9 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Các ô nhập dùng chung cho form thêm / sửa địa điểm (tên, slug, quốc gia, địa chỉ, số sao, ảnh, nội dung, nổi bật).
+?>
+<?php
 /**
  * Các trường form địa điểm, dùng chung cho add.php và editPlace.php.
  * @var object|null $place            NULL khi thêm mới
- * @var array       $categories_list
+ * @var array       $countries_list
  * @var string      $upload_error
  */
 $v = function ($field, $default = '') use ($place) {
@@ -28,16 +31,19 @@ $image_url = $place ? upload_url('places', $place->image) : '';
         <?php echo form_error('slug'); ?>
     </div>
     <div class="col-md-4 pb-3">
-        <label for="category_id" class="form-label">Danh mục</label>
-        <select name="category_id" id="category_id" class="form-select">
-            <option value="">-- Chưa phân loại --</option>
-            <?php foreach ($categories_list as $cate): ?>
-                <option value="<?php echo $cate->id; ?>" <?php echo set_select('category_id', (string) $cate->id, $place && $place->category_id == $cate->id); ?>>
-                    <?php echo html_escape($cate->title); ?>
+        <label for="country_id" class="form-label">Quốc gia <span class="text-danger">*</span></label>
+        <select name="country_id" id="country_id" class="form-select">
+            <option value="">-- Chọn quốc gia --</option>
+            <?php foreach ($countries_list as $country): ?>
+                <option value="<?php echo $country->id; ?>" <?php echo set_select('country_id', (string) $country->id, $place && $place->country_id == $country->id); ?>>
+                    <?php echo html_escape($country->name); ?>
                 </option>
             <?php endforeach; ?>
         </select>
-        <?php echo form_error('category_id'); ?>
+        <?php if (empty($countries_list)): ?>
+            <small class="text-muted">Chưa có quốc gia nào. <a href="<?php echo base_url('admin/countries/add'); ?>">Thêm quốc gia</a></small>
+        <?php endif; ?>
+        <?php echo form_error('country_id'); ?>
     </div>
     <div class="col-md-8 pb-3">
         <label for="address" class="form-label">Địa chỉ <span class="text-danger">*</span></label>

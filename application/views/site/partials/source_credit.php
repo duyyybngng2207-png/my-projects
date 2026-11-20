@@ -1,5 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Dòng ghi nguồn dưới nội dung crawl (trang thành phố, bài viết...). Bản ghi nhập tay (không có nguồn) thì không hiện.
+?>
+<?php
 /**
  * Dòng ghi nguồn cho nội dung crawl (yêu cầu của giấy phép CC BY-SA).
  * @var object $item  bản ghi places / posts có crawler_href, crawler_credit

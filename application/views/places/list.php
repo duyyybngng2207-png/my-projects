@@ -1,4 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); 
+// [VIEW] FILE KHÔNG CÒN DÙNG: bản HTML gốc của template Travelix, không controller nào load view này
+// (trang admin địa điểm dùng admin/places/list.php). Có thể xoá nếu không cần tham khảo.
 ?>
 <?php /** @var array $places_list */ ?>
 

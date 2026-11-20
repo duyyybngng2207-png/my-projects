@@ -1,5 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Các ô nhập dùng chung cho form thêm / sửa bài viết (tiêu đề, slug, ảnh, nội dung, trạng thái đăng) + thông tin nguồn crawl.
+?>
+<?php
 /**
  * Các trường form bài viết, dùng chung cho add.php và editPost.php.
  * @var object|null $post          NULL khi thêm mới

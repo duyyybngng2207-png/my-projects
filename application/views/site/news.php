@@ -1,5 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Danh sách tin tức /news - Blog::index(). Biến: $posts_list (6 bài/trang), $latest_posts (sidebar), $pagination_links.
+?>
+<?php
 /**
  * @var array $posts_list
  * @var array $latest_posts
@@ -41,6 +44,9 @@
                                 </div>
                             </div>
                             <div class="blog_post_title"><a href="<?php echo $link; ?>"><?php echo html_escape($item->title); ?></a></div>
+                            <?php if (!empty($item->author_name)): ?>
+                                <div class="blog_post_author"><i class="fa fa-user"></i> by <?php echo html_escape($item->author_name); ?></div>
+                            <?php endif; ?>
                             <div class="blog_post_text">
                                 <p><?php echo html_escape(mb_strimwidth(strip_tags((string) $item->content), 0, 300, '...', 'UTF-8')); ?></p>
                             </div>

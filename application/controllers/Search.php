@@ -5,10 +5,13 @@
  * @property Places_model $Places_model
  * @property Posts_model  $Posts_model
  * @property Hotels_model $Hotels_model
- * @property Categories_model $Categories_model
+ * @property Countries_model $Countries_model
  * @property Rate_limiter $rate_limiter
  * @property CI_Cache $cache
  */
+// Tìm kiếm trên site:
+//   /search/suggest?q=...         -> suggest(): gợi ý khi đang gõ (AJAX từ js/site.js, trả JSON)
+//   /search?q=...&type=hotels     -> index(): trang kết quả đầy đủ theo từng loại
 class Search extends Site_Controller
 {
     public function suggest()
@@ -19,20 +22,33 @@ class Search extends Site_Controller
             return $this->rate_limiter->deny_json(['items' => []]);
         }
 
+        // Từ khoá: bỏ khoảng trắng 2 đầu, cắt tối đa 100 ký tự
         $q = mb_substr(trim((string) $this->input->get('q', TRUE)), 0, 100);
         $items = [];
 
         // Cùng một từ khoá trong 60 giây thì lấy kết quả đã lưu, không truy vấn DB lại
-        $this->load->driver('cache', ['adapter' => 'file']);
+        $this->load->driver('cache', ['adapter' => 'file']);       // cache lưu file trong application/cache
         $cache_key = 'suggest_' . md5(mb_strtolower($q));
+        // Từ khoá dưới 2 ký tự -> không tìm (quá chung chung)
         $cached    = mb_strlen($q) >= 2 ? $this->cache->get($cache_key) : FALSE;
 
         if ($cached !== FALSE) {
+            // Có trong cache -> dùng luôn
             $items = $cached;
         } elseif (mb_strlen($q) >= 2) {
+            // Chưa có -> tìm trong DB: quốc gia, địa điểm, bài viết
             $this->load->model('Places_model');
             $this->load->model('Posts_model');
 
+            // Mỗi kết quả là 1 mảng {type, title, url, image} -> JS dựng thành danh sách gợi ý
+            foreach ($this->Countries_model->searchByKeyword($q, 3) as $c) {
+                $items[] = [
+                    'type'  => 'Country',
+                    'title' => $c->name,
+                    'url'   => country_url($c),
+                    'image' => upload_url('countries', $c->image),
+                ];
+            }
             foreach ($this->Places_model->searchByKeyword($q) as $p) {
                 $items[] = [
                     'type'  => 'Place',
@@ -49,9 +65,11 @@ class Search extends Site_Controller
                     'image' => !empty($a->image) ? base_url('uploads/posts/' . $a->image) : '',
                 ];
             }
+            // Lưu cache 60 giây
             $this->cache->save($cache_key, $items, 60);
         }
 
+        // Trả JSON {items: [...]}
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode(['items' => $items]));
@@ -60,13 +78,15 @@ class Search extends Site_Controller
     public function index()
     {
         $q    = trim((string) $this->input->get('q', TRUE));
+        // Loại kết quả (tab trên trang): chỉ nhận 4 giá trị, sai thì mặc định 'places'
         $type = (string) $this->input->get('type', TRUE);
-        if (!in_array($type, ['places', 'hotels', 'news', 'categories'], TRUE)) {
+        if (!in_array($type, ['places', 'hotels', 'news', 'countries'], TRUE)) {
             $type = 'places';
         }
 
         $items = [];
         if (mb_strlen($q) >= 2) {
+            // Mỗi loại tìm ở 1 bảng, rồi đổi về cùng 1 dạng {title, text, price, url, image} để view in chung
             switch ($type) {
                 case 'places':
                     $this->load->model('Places_model');
@@ -104,21 +124,22 @@ class Search extends Site_Controller
                         ];
                     }
                     break;
-                case 'categories':
-                    $this->load->model('Categories_model');
-                    foreach ($this->Categories_model->searchByKeyword($q, 20) as $r) {
+                case 'countries':
+                    // Countries_model đã nạp sẵn ở Site_Controller
+                    foreach ($this->Countries_model->searchByKeyword($q, 20) as $r) {
                         $items[] = [
-                            'title' => $r->title,
-                            'text'  => $r->description,
+                            'title' => $r->name,
+                            'text'  => (string) $r->continent_name,
                             'price' => null,
-                            'url'   => category_url($r),
-                            'image' => '',
+                            'url'   => country_url($r),
+                            'image' => upload_url('countries', $r->image),
                         ];
                     }
                     break;
             }
         }
 
+        // Dữ liệu cho view search.php + CSS/JS của trang
         $data = [
             'q'        => $q,
             'type'     => $type,

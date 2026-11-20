@@ -1,5 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Các ô nhập dùng chung cho form thêm / sửa danh mục.
+// set_value('field', mặc định): giữ lại giá trị vừa nhập khi form bị lỗi validate; form_error(): in lỗi của ô đó.
+?>
+<?php
 /** @var object|null $category  NULL khi thêm mới */
 $v = function ($field) use ($category) {
     return set_value($field, $category ? (string) $category->$field : '');

@@ -10,6 +10,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property CI_Pagination $pagination
  * @property CI_URI $uri
  */
+// Mẫu CRUD chuẩn của khu admin (các controller Places, Countries, Continents, Posts... làm tương tự):
+//   index()  -> danh sách + phân trang
+//   add()    -> GET: hiện form trống | POST: kiểm tra -> lưu -> về danh sách
+//   edit..() -> GET: hiện form có dữ liệu cũ | POST: kiểm tra -> cập nhật -> về danh sách
+//   delete..() -> chỉ nhận POST -> xoá -> về danh sách
 class Categories extends Admin_Controller
 {
     const PER_PAGE = 10;
@@ -42,9 +47,11 @@ class Categories extends Admin_Controller
 
     public function add()
     {
+        // Chỉ xử lý lưu khi form được gửi; mở trang lần đầu (GET) thì bỏ qua khối này
         if ($this->input->method() == 'post') {
             $this->_set_rules();
 
+            // run() = kiểm tra theo luật trong _set_rules(); sai thì view tự hiện lỗi (form_error)
             if ($this->form_validation->run() == TRUE) {
                 $title = trim((string) $this->input->post('title', TRUE));
                 $this->Categories_model->insertCategory([
@@ -58,6 +65,7 @@ class Categories extends Admin_Controller
             }
         }
 
+        // GET hoặc POST bị lỗi validate -> hiện (lại) form
         $this->load->view('admin/partials/header');
         $this->load->view('admin/categories/add');
         $this->load->view('admin/partials/footer');
@@ -65,11 +73,13 @@ class Categories extends Admin_Controller
 
     public function editCategory($id)
     {
+        // Bản ghi phải tồn tại
         $category = $this->Categories_model->getCategory($id);
         if (!$category) {
             $this->session->set_flashdata('error', 'Danh mục không tồn tại');
             redirect('admin/categories');
         }
+        // Truyền dữ liệu cũ sang view để điền sẵn vào form
         $data['category'] = $category;
 
         if ($this->input->method() == 'post') {
@@ -79,6 +89,7 @@ class Categories extends Admin_Controller
                 $title = trim((string) $this->input->post('title', TRUE));
                 $this->Categories_model->updateCategory($id, [
                     'title'       => $title,
+                    // truyền $id để không tự báo trùng slug với chính nó
                     'slug'        => $this->_make_slug($title, (int) $id),
                     'description' => $this->_description(),
                     'updated_at'  => date('Y-m-d H:i:s'),
@@ -95,6 +106,7 @@ class Categories extends Admin_Controller
 
     public function deleteCategory($id)
     {
+        // Chỉ nhận POST (nút xoá nằm trong form có CSRF token)
         if ($this->input->method() !== 'post') {
             show_404();
         }
@@ -103,6 +115,7 @@ class Categories extends Admin_Controller
             redirect('admin/categories');
         }
 
+        // Không cho xoá danh mục còn địa điểm (tránh địa điểm trỏ tới danh mục không tồn tại)
         $this->load->model('Places_model');
         if (count($this->Places_model->getPlacesByCategory($id)) > 0) {
             $this->session->set_flashdata('error', 'Không thể xóa: danh mục này đang có địa điểm. Hãy chuyển các địa điểm sang danh mục khác trước.');
@@ -116,9 +129,11 @@ class Categories extends Admin_Controller
 
     /* ------------------------------------------------------------------ */
 
+    // Luật kiểm tra form thêm / sửa (dùng chung)
     private function _set_rules()
     {
         $this->load->library('form_validation');
+        // Mỗi lỗi được bọc trong div chữ đỏ
         $this->form_validation->set_error_delimiters('<div class="text-danger">', '</div>');
         $this->form_validation->set_rules('title', 'Tên danh mục', 'trim|required|max_length[255]');
         $this->form_validation->set_rules('slug', 'Slug', 'trim|max_length[255]');
@@ -129,9 +144,11 @@ class Categories extends Admin_Controller
     private function _make_slug($title, $ignore_id = 0)
     {
         $input = trim((string) $this->input->post('slug', TRUE));
+        // Admin để trống ô slug -> tạo từ tên
         return unique_slug('categories', $input !== '' ? $input : $title, $ignore_id);
     }
 
+    // Mô tả: để trống thì lưu NULL thay vì chuỗi rỗng
     private function _description()
     {
         $value = trim((string) $this->input->post('description', TRUE));

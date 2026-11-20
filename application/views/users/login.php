@@ -1,4 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Form đăng nhập trang quản trị - Login::index() (URL /login). Gửi POST username/password về chính /login.
+// Sai tài khoản -> controller đặt flashdata 'error' rồi tải lại trang này để hiện lỗi.
+?>
 <!doctype html>
 <html lang="vi">
 <head>

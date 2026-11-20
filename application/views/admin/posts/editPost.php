@@ -1,8 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Trang sửa bài viết - Posts::editPost($id). Biến: $post, $upload_error.
+?>
 <?php /** @var object $post */ /** @var string $upload_error */ ?>
 <div class="container add-user">
     <h2>Chỉnh sửa bài viết</h2>
     <hr>
+    <?php // Form có upload ảnh (multipart) - gửi POST về chính trang này, controller kiểm tra rồi lưu ?>
     <?php echo form_open_multipart('admin/posts/editPost/' . $post->id); ?>
         <?php $this->load->view('admin/posts/_form', ['post' => $post]); ?>
         <div class="text-muted small mb-3">

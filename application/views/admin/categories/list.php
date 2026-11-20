@@ -1,4 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Danh sách danh mục - Categories::index(). Biến: $categories_list, $pagination_links, $offset.
+?>
 <?php /** @var array $categories_list */ /** @var string $pagination_links */ /** @var int $offset */ ?>
 
 <h2>Danh sách danh mục</h2>

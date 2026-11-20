@@ -232,6 +232,26 @@
 	{ transition: none; }
 }
 
+/* Thumbnail bài viết (sidebar "Latest/Other posts" + footer): khung vuông cố định, ảnh cắt vừa khung.
+   Template gốc giả định ảnh đã là 78x78; ảnh crawl (3000px) sẽ tràn nếu không khoá kích thước. */
+.latest_post_image
+{
+	width: 78px;
+	height: 78px;
+	border-radius: 8px;
+}
+.footer_blog_image { border-radius: 6px; }
+.latest_post_image a { display: block; width: 100%; height: 100%; }
+.latest_post_image img,
+.footer_blog_image img
+{
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	object-fit: cover;
+}
+
 /* =====================================================================
    TRANG CHI TIẾT KHÁCH SẠN: album, tiện ích, FAQ
    ===================================================================== */
@@ -307,6 +327,69 @@
 }
 .hotel_amenities_toggle:hover { background: #fa9e1b; color: #FFFFFF; }
 
+/* Tổng hợp đánh giá trên KAYAK (partials/guest_insights.php) */
+.gi_top { display: flex; gap: 32px; align-items: center; margin-top: 24px; }
+.gi_score_card
+{
+	flex: 0 0 180px;
+	padding: 24px 16px;
+	border-radius: 16px;
+	text-align: center;
+	color: #ffffff;
+	background: linear-gradient(135deg, #350a4e 0%, #8d4fff 100%);
+	box-shadow: 0 6px 20px rgba(53, 10, 78, 0.25);
+}
+.gi_score { font-size: 46px; font-weight: 700; line-height: 1; }
+.gi_score small { font-size: 18px; font-weight: 600; opacity: 0.8; }
+.gi_score_label { margin-top: 8px; font-size: 16px; font-weight: 700; color: #fa9e1b; }
+.gi_score_count { margin-top: 4px; font-size: 13px; opacity: 0.85; }
+.gi_histogram { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.gi_histogram li { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 14px; color: #000000; }
+.gi_hist_label { flex: 0 0 82px; }
+.gi_hist_bar { flex: 1; height: 8px; border-radius: 999px; background: #efe9f3; overflow: hidden; }
+.gi_hist_bar span { display: block; height: 100%; border-radius: 999px; background: #fa9e1b; }
+.gi_hist_count { flex: 0 0 48px; text-align: right; color: #929191; }
+.gi_categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px 28px; margin-top: 28px; }
+.gi_category_head { display: flex; justify-content: space-between; font-size: 14px; color: #000000; }
+.gi_category_head strong { color: #350a4e; }
+.gi_category_bar { margin-top: 6px; height: 6px; border-radius: 999px; background: #efe9f3; overflow: hidden; }
+.gi_category_bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #350a4e, #8d4fff); }
+.gi_summary { margin-top: 28px; padding: 20px 24px; border-left: 3px solid #fa9e1b; border-radius: 0 12px 12px 0; background: #fbf9fd; }
+.gi_summary_title { font-weight: 700; color: #350a4e; margin-bottom: 8px; }
+.gi_summary_title i { color: #fa9e1b; margin-right: 6px; }
+.gi_summary p { margin: 0; color: #000000; line-height: 1.8; }
+.gi_mentions, .gi_providers { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px; }
+.gi_mentions_label { font-size: 14px; font-weight: 600; color: #350a4e; margin-right: 4px; }
+.gi_mention
+{
+	padding: 5px 14px;
+	border-radius: 999px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #350a4e;
+	background: rgba(250, 158, 27, 0.12);
+}
+.gi_provider { padding: 5px 14px; border-radius: 999px; font-size: 13px; color: #000000; border: 1px solid #e6dfeb; }
+.gi_provider strong { color: #350a4e; margin-right: 4px; }
+.gi_provider small { color: #929191; }
+.gi_tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 28px; }
+.gi_block_title { font-weight: 700; color: #350a4e; margin-bottom: 12px; }
+.gi_block_title i { color: #fa9e1b; margin-right: 6px; }
+.gi_tips { margin: 0; padding: 0; list-style: none; }
+.gi_tips li { padding: 10px 0; border-bottom: 1px solid #efe9f3; font-size: 14px; color: #000000; line-height: 1.6; }
+.gi_tips li:last-child { border-bottom: none; }
+.gi_tips strong { display: block; color: #350a4e; }
+.gi_disclaimer { margin-top: 20px; font-size: 13px; color: #929191; }
+.gi_disclaimer i { color: #fa9e1b; margin-right: 4px; }
+.gi_disclaimer a { color: #fa9e1b; font-weight: 600; }
+
+@media only screen and (max-width: 767px)
+{
+	.gi_top { flex-direction: column; align-items: stretch; gap: 20px; }
+	.gi_score_card { flex-basis: auto; }
+	.gi_tabs { grid-template-columns: 1fr; }
+}
+
 /* Dòng ghi nguồn cho nội dung crawl (CC BY-SA) */
 .source_credit
 {
@@ -320,3 +403,183 @@
 }
 .source_credit i { color: #fa9e1b; margin-right: 4px; }
 .source_credit a { color: #fa9e1b; font-weight: 600; }
+
+/* Tác giả bài viết (post_detail.php, news.php) */
+.post_detail_meta a { color: #fa9e1b; font-weight: 600; }
+.post_detail_meta_sep { margin: 0 8px; color: #c4b8cc; }
+.blog_post_author { margin-top: 6px; font-size: 14px; color: #929191; }
+.blog_post_author i { color: #fa9e1b; margin-right: 4px; }
+.post_author
+{
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+	margin-top: 36px;
+	padding: 24px;
+	background: #ffffff;
+	border-radius: 16px;
+	box-shadow: 0 6px 24px rgba(53, 10, 78, 0.10);
+}
+.post_author_avatar
+{
+	flex: 0 0 88px;
+	width: 88px;
+	height: 88px;
+	border-radius: 50%;
+	overflow: hidden;
+	background: linear-gradient(135deg, #350a4e 0%, #8d4fff 100%);
+	box-shadow: 0 0 0 4px rgba(250, 158, 27, 0.25);
+}
+.post_author_avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.post_author_avatar span
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	font-size: 34px;
+	font-weight: 700;
+	color: #ffffff;
+}
+.post_author_body { min-width: 0; }
+.post_author_label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #fa9e1b; }
+.post_author_name { font-size: 20px; font-weight: 700; color: #350a4e; line-height: 1.3; }
+.post_author_job { font-size: 14px; color: #929191; }
+.post_author_bio { margin: 10px 0 0; font-size: 15px; line-height: 1.7; color: #000000; }
+.post_author_social { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.post_author_social a
+{
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	background: rgba(250, 158, 27, 0.12);
+	color: #350a4e;
+	transition: all 200ms ease;
+}
+.post_author_social a:hover { background: #fa9e1b; color: #ffffff; transform: translateY(-1px); }
+
+@media only screen and (max-width: 575px)
+{
+	.post_author { flex-direction: column; align-items: center; text-align: center; padding: 20px; }
+	.post_author_social { justify-content: center; }
+}
+
+/* Breadcrumb dạng nhãn: [Vietnam] › [Phu Quoc] (partials/breadcrumb.php) */
+.site_breadcrumb { margin-bottom: 36px; }
+.site_breadcrumb ol
+{
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	list-style: none;
+	margin: 0;
+	padding: 6px;
+	background: #ffffff;
+	border-radius: 999px;
+	box-shadow: 0 6px 24px rgba(53, 10, 78, 0.12);
+}
+.site_breadcrumb li { margin: 0; }
+.site_breadcrumb_item a,
+.site_breadcrumb_label
+{
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 18px;
+	border-radius: 999px;
+	font-size: 14px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	line-height: 1.4;
+	white-space: nowrap;
+	transition: all 200ms ease;
+}
+/* Cấp trên (có link): nền cam nhạt */
+.site_breadcrumb_item a
+{
+	color: #350a4e;
+	background: rgba(250, 158, 27, 0.12);
+	text-decoration: none;
+}
+.site_breadcrumb_item a i { color: #fa9e1b; transition: color 200ms ease; }
+.site_breadcrumb_item a:hover
+{
+	color: #ffffff;
+	background: #fa9e1b;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(250, 158, 27, 0.35);
+}
+.site_breadcrumb_item a:hover i { color: #ffffff; }
+/* Trang hiện tại: gradient tím -> tím hồng của theme */
+.site_breadcrumb_item.is_current .site_breadcrumb_label
+{
+	color: #ffffff;
+	background: linear-gradient(135deg, #350a4e 0%, #8d4fff 100%);
+	box-shadow: 0 4px 14px rgba(53, 10, 78, 0.3);
+}
+.site_breadcrumb_item.is_current .site_breadcrumb_label i { color: #fa9e1b; }
+/* Tên dài (khách sạn) trên mobile: cắt bớt thay vì tràn */
+.site_breadcrumb_label span { overflow: hidden; text-overflow: ellipsis; max-width: 60vw; }
+.site_breadcrumb_sep { color: #c4b8cc; font-size: 18px; line-height: 1; padding: 0 2px; }
+
+@media only screen and (max-width: 575px)
+{
+	.site_breadcrumb ol { border-radius: 20px; }
+	.site_breadcrumb_item a,
+	.site_breadcrumb_label { padding: 7px 14px; font-size: 13px; }
+}
+
+/* Dòng "2 countries in Asia" (continent/<slug>): pill giống breadcrumb */
+.result_pill
+{
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	padding: 6px;
+	background: #ffffff;
+	border-radius: 999px;
+	box-shadow: 0 6px 24px rgba(53, 10, 78, 0.12);
+}
+.result_pill_chip
+{
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 18px;
+	border-radius: 999px;
+	font-size: 14px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	line-height: 1.4;
+	white-space: nowrap;
+	color: #350a4e;
+	background: rgba(250, 158, 27, 0.12);
+}
+.result_pill_chip i { color: #fa9e1b; }
+.result_pill_chip.is_main
+{
+	color: #ffffff;
+	background: linear-gradient(135deg, #350a4e 0%, #8d4fff 100%);
+	box-shadow: 0 4px 14px rgba(53, 10, 78, 0.3);
+}
+.result_pill_sep { color: #a99bb3; font-size: 13px; font-weight: 600; padding: 0 2px; }
+
+@media only screen and (max-width: 575px)
+{
+	.result_pill { border-radius: 20px; }
+	.result_pill_chip { padding: 7px 14px; font-size: 13px; }
+}
+
+/* Giới thiệu quốc gia (country/<slug>) */
+.country_about { margin-top: 60px; }
+.country_about h2 { font-size: 24px; font-weight: 600; color: #350a4e; margin-bottom: 16px; }
+.country_about p { font-size: 15px; color: #000000; line-height: 1.8; }
+
+/* Dòng "3 destinations · hotels from $32" ở danh sách quốc gia (partials/country_items.php) */
+.offers_price.country_stats { font-size: 22px; line-height: 1.4; margin-bottom: 4px; }
+.offers_price.country_stats span { margin-left: 4px; color: #929191; }

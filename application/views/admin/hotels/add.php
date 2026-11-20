@@ -1,5 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Form thêm khách sạn - Hotels::add(). Album / tiện ích nhập mỗi dòng 1 mục; FAQ nhập câu hỏi 1 dòng + trả lời dòng dưới
+// (controller tự đổi sang JSON khi lưu). Biến: $places_list, $upload_error.
+?>
+<?php
 /**
  * @var array  $places_list
  * @var string $upload_error
@@ -8,6 +12,7 @@
 <div class="container add-user">
     <h2>Thêm mới khách sạn</h2>
     <hr>
+    <?php // form_open_multipart: form có enctype="multipart/form-data" -> mới gửi được file ảnh lên server ?>
     <?php echo form_open_multipart('admin/hotels/add'); ?>
 
         <h5 class="mt-2 mb-3 text-primary">Thông tin chung</h5>

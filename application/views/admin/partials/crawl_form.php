@@ -1,5 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Khung "Crawl dữ liệu từ KAYAK" đặt ở đầu các trang danh sách admin (khách sạn, địa điểm, quốc gia, bài viết...).
+// Form POST tới crawler (vd crawler/brand/place) -> Crawler_Controller::respond() đặt flash rồi quay lại trang này.
+// Biến nhận vào: $action, $label, $placeholder, $hint, $select (tuỳ chọn).
+?>
+<?php
 /**
  * Khung crawl dữ liệu đặt ở đầu các trang danh sách admin.
  *

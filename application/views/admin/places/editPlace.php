@@ -1,8 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
-<?php /** @var object $place */ /** @var array $categories_list */ /** @var string $upload_error */ ?>
+<?php
+// [VIEW] Trang sửa địa điểm - Places::editPlace($id). Biến: $place, $countries_list, $upload_error.
+?>
+<?php /** @var object $place */ /** @var array $countries_list */ /** @var string $upload_error */ ?>
 <div class="container add-user">
     <h2>Chỉnh sửa địa điểm</h2>
     <hr>
+    <?php // Form có upload ảnh (multipart) - gửi POST về chính trang này, controller kiểm tra rồi lưu ?>
     <?php echo form_open_multipart('admin/places/editPlace/' . $place->id); ?>
         <?php $this->load->view('admin/places/_form', ['place' => $place]); ?>
         <div class="text-muted small mb-3">

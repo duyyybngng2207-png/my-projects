@@ -1,4 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Danh sách thẻ thành phố trên trang quốc gia. Dùng 2 nơi: lúc tải trang và khi lọc AJAX (Home::country trả HTML này trong JSON).
+?>
 <?php /** @var array $places_list Danh sách địa điểm đã lọc (dùng cho cả lần tải trang đầu và AJAX) */ ?>
 
 <?php if (empty($places_list)): ?>

@@ -1,32 +1,26 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Danh sách địa điểm (thành phố) - Places::index(), cũng là trang mở đầu sau khi đăng nhập admin.
+// Đầu trang có form "Crawl địa điểm từ KAYAK" (-> crawler/brand/place). Biến: $places_list, $pagination_links, $offset.
+?>
+<?php
 /**
  * @var array  $places_list
  * @var string $pagination_links
  * @var int    $offset
- * @var array  $categories_list
  */
 ?>
 
 <h2>Danh sách địa điểm</h2>
 <hr>
 <?php
-$category_options = [];
-    foreach ($categories_list as $cate) {
-        $category_options[$cate->id] = $cate->title;
-    }
     $this->load->view('admin/partials/crawl_form', [
         'action'      => 'crawler/brand/place',
         'label'       => 'Crawl địa điểm (thành phố) từ KAYAK',
         'placeholder' => 'https://www.kayak.com/Phu-Quoc-Hotels.54054.hotel.ksp',
         'hint'        => 'Chỉ nhận link trang khách sạn theo thành phố dạng <code>Tên-Thành-Phố-Hotels.&lt;id&gt;.hotel.ksp</code> trên kayak.com. '
+                    . 'Quốc gia được tự xác định từ trang nguồn (chưa có thì tự tạo). '
                     . 'Crawl lại cùng link sẽ cập nhật địa chỉ, ảnh, nội dung; giữ nguyên tên, slug, số sao và trạng thái nổi bật.',
-        'select'      => [
-            'name'    => 'category_id',
-            'label'   => 'Danh mục',
-            'empty'   => '-- Chưa phân loại --',
-            'options' => $category_options,
-        ],
     ]);
 ?>
 
@@ -40,7 +34,7 @@ $category_options = [];
             <th>STT</th>
             <th>Ảnh</th>
             <th class="text-start">Tên địa điểm / Slug</th>
-            <th>Danh mục</th>
+            <th>Quốc gia</th>
             <th class="text-start">Địa chỉ</th>
             <th>Sao</th>
             <th>Nổi bật</th>
@@ -68,7 +62,7 @@ $category_options = [];
                     <strong><?php echo html_escape($item->name); ?></strong>
                     <br><small class="text-muted"><?php echo html_escape((string) $item->slug); ?></small>
                 </td>
-                <td><?php echo $item->category_name !== null ? html_escape($item->category_name) : '<span class="text-muted">Chưa phân loại</span>'; ?></td>
+                <td><?php echo $item->country_name !== null ? html_escape($item->country_name) : '<span class="text-danger">Chưa có quốc gia</span>'; ?></td>
                 <td class="text-start"><?php echo html_escape($item->address); ?></td>
                 <td><?php echo !empty($item->rating) ? '<span class="text-warning">' . str_repeat('★', (int) $item->rating) . '</span>' : '-'; ?></td>
                 <td><?php echo $item->is_featured ? '<span class="badge bg-warning">Nổi bật</span>' : ''; ?></td>

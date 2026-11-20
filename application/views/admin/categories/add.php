@@ -1,4 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Trang thêm danh mục - Categories::add(). Phần ô nhập nằm trong _form.php (dùng chung với trang sửa).
+?>
 <div class="container add-user">
     <h2>Thêm mới danh mục</h2>
     <hr>

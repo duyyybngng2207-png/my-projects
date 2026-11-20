@@ -1,5 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Form sửa khách sạn - Hotels::editHotel($id).
+// Biến: $hotel, $places_list, $upload_error, $albums_text / $amenities_text / $faqs_text (JSON trong DB đã đổi thành từng dòng).
+?>
+<?php
 /**
  * @var object $hotel
  * @var array  $places_list
@@ -16,6 +20,7 @@ $image_url = upload_url('hotels', $hotel->image);
 <div class="container add-user">
     <h2>Chỉnh sửa khách sạn</h2>
     <hr>
+    <?php // Form có upload ảnh (multipart) - gửi POST về chính trang này, controller kiểm tra rồi lưu ?>
     <?php echo form_open_multipart('admin/hotels/editHotel/' . $hotel->id); ?>
 
         <h5 class="mt-2 mb-3 text-primary">Thông tin chung</h5>

@@ -1,8 +1,13 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] TRANG CHỦ - Home::index(). Các khối từ trên xuống: slider + form tìm kiếm, "Explore by continent" ($continents_list),
+// slider nổi bật ($featured_list), "the best offers" ($places_list), đánh giá của khách ($testimonials),
+// "trending now" ($trending_list).
+?>
+<?php
 /**
  * @var array $places_list
- * @var array $categories_list
+ * @var array $continents_list
  * @var array $featured_list
  * @var array $trending_list
  */
@@ -17,7 +22,7 @@ $search_tabs = [
     ['placeholder.svg', 'Places',     'places',     'Search places...'],
     ['suitcase.png', 'Hotels',     'hotels',     'Search hotels...'],
     ['message.svg', 'News',        'news',       'Search news...'],
-    ['island.png', 'Categories', 'categories', 'Search categories...'],
+    ['island.png', 'Countries', 'countries', 'Search countries...'],
 ];
 
 // [ảnh người, ảnh biểu tượng, chú thích ảnh]
@@ -108,33 +113,34 @@ $search_tabs = [
 		<div class="container">
 			<div class="row">
 				<div class="col">
-					<h2 class="intro_title text-center">Explore by region</h2>
+					<h2 class="intro_title text-center">Explore by continent</h2>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
 					<div class="intro_text text-center">
-						<p>Select a region to view top tourist destinations, then book your trip in just a few steps.</p>
+						<p>Pick a continent, choose a country, then find the best destinations and hotels for your trip.</p>
 					</div>
 				</div>
 			</div>
 
 			<div class="row intro_items">
-				<?php foreach ($categories_list as $cate): ?>
+				<?php foreach ($continents_list as $continent): ?>
 					<?php
-					$cover = upload_url('places', $cate->cover_image, 'images/intro_1.jpg');
+					$cover = upload_url($continent->cover_folder, $continent->cover_image, 'images/intro_1.jpg');
+					$total = (int) $continent->total_countries;
 					?>
 					<div class="col-lg-4 intro_col">
 						<div class="intro_item">
 							<div class="intro_item_overlay"></div>
 							<div class="intro_item_background" style="<?php echo css_bg($cover); ?>"></div>
 							<div class="intro_item_content d-flex flex-column align-items-center justify-content-center">
-								<div class="intro_date"><?php echo (int) $cate->total_places; ?> locations</div>
-								<div class="button intro_button"><div class="button_bcg"></div><a href="<?php echo category_url($cate); ?>">see more<span></span><span></span><span></span></a></div>
+								<div class="intro_date"><?php echo $total > 0 ? $total . ($total === 1 ? ' country' : ' countries') : 'coming soon'; ?></div>
+								<div class="button intro_button"><div class="button_bcg"></div><a href="<?php echo continent_url($continent); ?>">see more<span></span><span></span><span></span></a></div>
 								<div class="intro_center text-center">
-									<h1><?php echo html_escape($cate->title); ?></h1>
-									<?php if ($cate->min_price !== null): ?>
-										<div class="intro_price">From $<?php echo number_format((float) $cate->min_price); ?></div>
+									<h1><?php echo html_escape($continent->name); ?></h1>
+									<?php if ($continent->min_price !== null): ?>
+										<div class="intro_price">From $<?php echo number_format((float) $continent->min_price); ?></div>
 									<?php endif; ?>
 								</div>
 							</div>

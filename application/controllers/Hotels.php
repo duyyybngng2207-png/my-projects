@@ -16,6 +16,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property CI_Pagination $pagination
  * @property CI_URI $uri
  */
+// /admin/hotels: CRUD khách sạn. Trang danh sách có form "Crawl khách sạn từ KAYAK" -> crawler/brand
+// LUỒNG DỮ LIỆU JSON:  DB (chuỗi JSON) --_json_to_lines--> textarea trên form (mỗi dòng 1 mục)
+//                      textarea --_lines_to_json--> DB (chuỗi JSON)
 class Hotels extends Admin_Controller
 {
     const PER_PAGE = 10;
@@ -24,9 +27,10 @@ class Hotels extends Admin_Controller
     {
         parent::__construct();
         $this->load->model('Hotels_model');
-        $this->load->model('Places_model');
+        $this->load->model('Places_model');     // cho ô chọn địa điểm
     }
 
+    // Danh sách khách sạn
     public function index()
     {
         $this->load->library('pagination');
@@ -47,6 +51,7 @@ class Hotels extends Admin_Controller
         $this->load->view('admin/partials/footer');
     }
 
+    // Thêm khách sạn
     public function add()
     {
         $data['places_list']  = $this->Places_model->getAllPlaces();
@@ -77,6 +82,7 @@ class Hotels extends Admin_Controller
         $this->load->view('admin/partials/footer');
     }
 
+    // Sửa khách sạn
     public function editHotel($id)
     {
         $hotel = $this->Hotels_model->getHotel($id);
@@ -128,6 +134,7 @@ class Hotels extends Admin_Controller
         $this->load->view('admin/partials/footer');
     }
 
+    // Xoá khách sạn (chỉ POST) + xoá ảnh
     public function deleteHotel($id)
     {
         if ($this->input->method() !== 'post') {
@@ -165,7 +172,9 @@ class Hotels extends Admin_Controller
         $this->form_validation->set_rules('slug', 'Slug', 'trim|max_length[255]');
         $this->form_validation->set_rules('place_id', 'Địa điểm', 'callback__place_exists');
         $this->form_validation->set_rules('address', 'Địa chỉ', 'trim|max_length[255]');
+        // Số điện thoại: chỉ chữ số và các ký tự + - ( ) . khoảng trắng
         $this->form_validation->set_rules('phone', 'Số điện thoại', 'trim|max_length[20]|regex_match[/^[0-9+\-\s().]*$/]');
+        // Giá: số nguyên >= 0
         $this->form_validation->set_rules('price', 'Giá', 'trim|required|is_natural');
         $this->form_validation->set_rules('rating', 'Số sao', 'in_list[,1,2,3,4,5]');
         $this->form_validation->set_rules('rating_count', 'Số lượt đánh giá', 'trim|is_natural');
@@ -180,6 +189,7 @@ class Hotels extends Admin_Controller
     /** Lấy dữ liệu từ form, chuẩn hoá đúng kiểu cột (chuỗi rỗng -> NULL, danh sách -> JSON). */
     private function _collect_data()
     {
+        // Hàm nhỏ dùng lại nhiều lần: lấy 1 ô form, để trống thì trả NULL
         $nullable = function ($field) {
             $value = trim((string) $this->input->post($field, TRUE));
             return $value === '' ? NULL : $value;
@@ -200,10 +210,11 @@ class Hotels extends Admin_Controller
             'thumbnail'    => $nullable('thumbnail'),
             'crawler_href' => $nullable('crawler_href'),
             'description'  => $nullable('description'),
+            // Các textarea nhiều dòng -> chuỗi JSON để lưu DB
             'albums'       => $this->_lines_to_json($this->input->post('albums', TRUE)),
             'amenities'    => $this->_lines_to_json($this->input->post('amenities', TRUE)),
             'faqs'         => $this->_lines_to_faqs($this->input->post('faqs', TRUE)),
-            'is_trending'  => ($this->input->post('is_trending') === '1') ? 1 : 0,
+            'is_trending'  => ($this->input->post('is_trending') === '1') ? 1 : 0,   // hiện ở "Trending now"
         ];
     }
 
@@ -243,7 +254,9 @@ class Hotels extends Admin_Controller
     }
 
     /* ----- Callback kiểm tra ----- */
+    // Các hàm _xxx dưới đây được form_validation gọi qua luật "callback__xxx"
 
+    // Địa điểm không bắt buộc, nhưng nếu chọn thì phải tồn tại
     public function _place_exists($id)
     {
         if ($id === '' || $id === NULL) {
@@ -256,6 +269,7 @@ class Hotels extends Admin_Controller
         return FALSE;
     }
 
+    // Để trống hoặc là 1 URL hợp lệ
     public function _valid_url_or_empty($url)
     {
         if ($url === '' || $url === NULL || filter_var($url, FILTER_VALIDATE_URL)) {
@@ -270,6 +284,7 @@ class Hotels extends Admin_Controller
         // Các dòng (bỏ dòng trống) đi theo cặp: câu hỏi, câu trả lời -> số dòng phải chẵn
         $lines = $this->_split_lines($text);
         if (count($lines) % 2 !== 0) {
+            // end($lines) = câu hỏi cuối cùng chưa có trả lời
             $this->form_validation->set_message('_valid_faqs', 'Câu hỏi "' . end($lines) . '" của {field} chưa có câu trả lời (câu trả lời viết ở dòng ngay dưới câu hỏi)');
             return FALSE;
         }
@@ -278,8 +293,10 @@ class Hotels extends Admin_Controller
 
     /* ----- Chuyển đổi danh sách <-> JSON ----- */
 
+    // Tách textarea thành mảng các dòng, bỏ khoảng trắng 2 đầu và bỏ dòng trống
     private function _split_lines($text)
     {
+        // \R = mọi kiểu xuống dòng (\n, \r\n)
         $lines = preg_split('/\R/u', (string) $text);
         return array_values(array_filter(array_map('trim', $lines), 'strlen'));
     }
@@ -300,6 +317,7 @@ class Hotels extends Admin_Controller
         }
         $out = [];
         foreach ($items as $item) {
+            // Phần tử dạng object (vd album crawler {url, caption}) -> lấy url / name
             if (is_array($item)) {
                 $item = isset($item['url']) ? $item['url'] : (isset($item['name']) ? $item['name'] : json_encode($item));
             }
@@ -315,6 +333,7 @@ class Hotels extends Admin_Controller
     private function _lines_to_faqs($text)
     {
         $faqs = [];
+        // array_chunk(..., 2): chia mảng dòng thành từng cặp [câu hỏi, câu trả lời]
         foreach (array_chunk($this->_split_lines($text), 2) as $pair) {
             $question = $pair[0];
             $answer   = isset($pair[1]) ? $pair[1] : '';
@@ -344,6 +363,7 @@ class Hotels extends Admin_Controller
             // Câu hỏi / trả lời mỗi cái gói trong 1 dòng (gộp xuống dòng bên trong) để không lệch cặp
             $out[] = trim(preg_replace('/\s+/u', ' ', $q)) . "\n" . trim(preg_replace('/\s+/u', ' ', $a));
         }
+        // Các cặp cách nhau 1 dòng trống
         return implode("\n\n", $out);
     }
 }

@@ -55,11 +55,14 @@ $(function ()
 		clearTimeout(timer);
 		if (request) { request.abort(); }
 
+		// Bộ lọc này đã tải trước đó -> hiện lại ngay, không gọi server
 		if (memo[qs]) { show(memo[qs]); return; }
 
+		// Làm mờ danh sách trong lúc chờ kết quả
 		$grid.css('opacity', 0.4);
 		timer = setTimeout(function ()
 		{
+			// Đang bị server tạm chặn (429) -> báo, không gửi
 			if (Date.now() < pausedUntil)
 			{
 				$grid.css('opacity', 1);
@@ -67,6 +70,7 @@ $(function ()
 				return;
 			}
 
+			// GET country/<slug>?name=..&stars=.. kèm header AJAX -> Home::country() trả JSON {total, html}
 			request = $.ajax({
 				url: url + qs,
 				method: 'GET',
@@ -76,12 +80,15 @@ $(function ()
 			})
 			.done(function (res)
 			{
+				// Lưu lại kết quả theo bộ lọc rồi hiển thị
 				memo[qs] = res;
 				show(res);
 			})
 			.fail(function (xhr, status)
 			{
+				// Request bị huỷ do người dùng đổi bộ lọc tiếp -> không báo lỗi
 				if (status === 'abort') { return; }
+				// 429: lọc quá nhanh -> tạm dừng đúng số giây server yêu cầu
 				if (xhr.status === 429)
 				{
 					var wait = ((xhr.responseJSON && xhr.responseJSON.retry_after) || 10) * 1000;
@@ -93,11 +100,13 @@ $(function ()
 					notice('Could not load locations. Please try again.');
 				}
 			})
+			// Xong (thành công hay lỗi) -> bỏ làm mờ
 			.always(function () { $grid.css('opacity', 1); });
 		}, 300);
 	}
 
 	// Chọn một giá trị trong dropdown
+	// Mỗi nút có data-key (name / stars) và data-value (asc, desc, 1..5 hoặc '' = bỏ lọc)
 	$filters.on('click', '.ajax_filter_btn', function ()
 	{
 		var $btn  = $(this);
@@ -107,6 +116,7 @@ $(function ()
 		if (state[key] === value) { return; }   // chọn lại đúng giá trị đang chọn: không gửi
 		state[key] = value;
 
+		// Đổi chữ trên nút dropdown thành lựa chọn vừa bấm (bỏ lọc -> chữ mặc định)
 		var $text = $btn.closest('ul').siblings('.sorting_text');
 		$text.text(value === '' ? $text.data('default') : $btn.text().trim());
 

@@ -1,4 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Trang liên hệ /contact - Contact::index(). Form liên hệ gửi AJAX bằng js/site.js tới /contact/send.
+?>
 
 <!-- Home -->
 <div class="home">

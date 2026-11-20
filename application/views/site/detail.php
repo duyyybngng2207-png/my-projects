@@ -1,5 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Trang chi tiết thành phố /place/<slug> - Home::detail(). Ảnh, nội dung, khách sạn gợi ý, đánh giá gộp của các khách sạn.
+// Biến: $place, $hotels, $reviews, $review_stats.
+?>
+<?php
 /** @var object $place 
  * @var array  $reviews
  * @var object $review_stats
@@ -14,7 +18,7 @@ $avatars = ['review_1.jpg', 'review_2.jpg'];
 <div class="home">
     <div class="home_background parallax-window" data-parallax="scroll" data-image-src="<?php echo base_url('images/single_background.jpg'); ?>"></div>
     <div class="home_content">
-        <div class="home_title"><?php echo html_escape($place->category_name ?? 'Destination'); ?></div>
+        <div class="home_title"><?php echo html_escape(!empty($place->country_name) ? $place->country_name : 'Destination'); ?></div>
     </div>
 </div>
 
@@ -23,6 +27,11 @@ $avatars = ['review_1.jpg', 'review_2.jpg'];
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
+                <?php $this->load->view('site/partials/breadcrumb', ['crumbs' => [
+                    !empty($place->continent_slug) ? ['label' => $place->continent_name, 'url' => continent_url((object) ['slug' => $place->continent_slug]), 'icon' => 'fa-globe'] : null,
+                    !empty($place->country_slug)   ? ['label' => $place->country_name,   'url' => country_url((object) ['slug' => $place->country_slug]),     'icon' => 'fa-flag']  : null,
+                    ['label' => $place->name, 'icon' => 'fa-map-marker'],
+                ]]); ?>
                 <div class="single_listing">
 
                     <div class="hotel_info">

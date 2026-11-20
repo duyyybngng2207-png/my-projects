@@ -1,4 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Danh sách khách sạn - Hotels::index() (URL /admin/hotels).
+// Đầu trang có form "Crawl khách sạn từ KAYAK" (crawl_form.php -> crawler/brand). Biến: $hotels_list, $places_list, $pagination_links, $offset.
+?>
 <?php /** @var array $hotels_list */ /** @var array $places_list */ /** @var string $pagination_links */ /** @var int $offset */ ?>
 
 <h2>Danh sách khách sạn</h2>
@@ -62,7 +66,12 @@ $this->load->view('admin/partials/crawl_form', [
                     <strong><?php echo html_escape($item->name); ?></strong>
                     <br><small class="text-muted"><?php echo html_escape($item->slug); ?></small>
                 </td>
-                <td><?php echo $item->place_name !== null ? html_escape($item->place_name) : '<span class="text-muted">Không thuộc địa điểm nào</span>'; ?></td>
+                <td>
+                    <?php echo $item->place_name !== null ? html_escape($item->place_name) : '<span class="text-muted">Không thuộc địa điểm nào</span>'; ?>
+                    <?php if (!empty($item->country_name)): ?>
+                        <br><small class="text-muted"><?php echo html_escape($item->country_name); ?></small>
+                    <?php endif; ?>
+                </td>
                 <td class="text-start">
                     <?php echo html_escape($item->address ?? ''); ?>
                     <?php if (!empty($item->phone)): ?>

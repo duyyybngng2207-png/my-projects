@@ -1,5 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Chi tiết 1 đơn đặt lịch - Bookings::detail($id) (URL /admin/bookings/detail/<id>).
+// Biến: $booking (kèm tên địa điểm, khách sạn, giá đã chốt lúc đặt và giá hiện tại).
+?>
+<?php
 /** @var object $booking */
 $statusMap   = [1 => 'Chờ xác nhận', 2 => 'Đã xác nhận', 3 => 'Đã hoàn thành'];
 $statusClass = [1 => 'warning', 2 => 'info', 3 => 'success'];

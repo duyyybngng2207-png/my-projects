@@ -1,8 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Trang chi tiết khách sạn /hotel/<id>-<slug> - Home::hotel(). Breadcrumb, thông tin, album ảnh, mô tả, tiện ích, FAQ,
+// khối "What guests say" (tổng hợp từ KAYAK), đánh giá của khách trên site, khách sạn khác cùng thành phố.
+?>
+<?php
 /**
  * @var object      $hotel
  * @var object|null $place         Địa điểm của khách sạn (có thể null)
+ * @var object|null $country       Quốc gia của địa điểm {slug, name} (có thể null)
+ * @var object|null $continent     Châu lục của quốc gia {slug, name} (có thể null)
  * @var array       $other_hotels  Khách sạn khác cùng địa điểm
  * @var array       $albums        Danh sách URL ảnh (từ cột albums)
  * @var array       $amenities     Danh sách tiện ích (từ cột amenities)
@@ -30,6 +36,12 @@ $phone_link   = preg_replace('/[^0-9+]/', '', (string) $hotel->phone);
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
+                <?php $this->load->view('site/partials/breadcrumb', ['crumbs' => [
+                    $continent ? ['label' => $continent->name, 'url' => continent_url($continent), 'icon' => 'fa-globe'] : null,
+                    $country   ? ['label' => $country->name,   'url' => country_url($country),     'icon' => 'fa-flag']  : null,
+                    $place     ? ['label' => $place->name,     'url' => place_url($place),         'icon' => 'fa-map-marker'] : null,
+                    ['label' => $hotel->name, 'icon' => 'fa-bed'],
+                ]]); ?>
                 <div class="single_listing">
 
                     <div class="hotel_info">
@@ -156,6 +168,9 @@ $phone_link   = preg_replace('/[^0-9+]/', '', (string) $hotel->phone);
                                 </div>
                             </div>
                         <?php endif; ?>
+
+                        <!-- Tổng hợp đánh giá trên KAYAK (crawl) -->
+                        <?php $this->load->view('site/partials/guest_insights', ['insights' => $insights, 'hotel' => $hotel]); ?>
 
                     </div>
 

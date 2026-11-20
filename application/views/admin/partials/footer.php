@@ -1,3 +1,7 @@
+<?php
+// [VIEW] Phần cuối chung của mọi trang admin: đóng các thẻ mở ở header.php + nạp file JS.
+// Controller admin gọi: load->view('admin/partials/footer') sau view nội dung.
+?>
             </div>
         </div>
     </main>

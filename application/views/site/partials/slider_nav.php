@@ -1,5 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Nút mũi tên trái / phải cho các slider Owl Carousel. Biến: $p (tiền tố class), $dir (prev / next).
+?>
+<?php
 /**
  * @var string $p    tiền tố của slider: home | cta | test
  * @var string $dir  prev | next

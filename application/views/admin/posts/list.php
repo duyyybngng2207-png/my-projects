@@ -1,8 +1,23 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Danh sách bài viết - Posts::index(). Đầu trang có form "Crawl bài viết từ blog KAYAK" (-> crawler/brand/post).
+// Biến: $posts_list (kèm author_name), $pagination_links, $offset.
+?>
 <?php /** @var array $posts_list */ /** @var string $pagination_links */ /** @var int $offset */ ?>
 
 <h2>Danh sách bài viết</h2>
 <hr>
+<?php
+    $this->load->view('admin/partials/crawl_form', [
+        'action'      => 'crawler/brand/post',
+        'label'       => 'Crawl bài viết từ blog KAYAK',
+        'placeholder' => 'https://www.kayak.com/news/christmas-markets-in-france/',
+        'hint'        => 'Link 1 bài dạng <code>kayak.com/news/&lt;slug&gt;/</code>, hoặc link trang danh sách '
+                    . '<code>kayak.com/news/</code> / <code>kayak.com/news/category/&lt;chuyên-mục&gt;/</code> để lấy '
+                    . '6 bài mới nhất. Tác giả của bài được tự lưu (tên, ảnh, tiểu sử, mạng xã hội). '
+                    . 'Crawl lại cùng link sẽ cập nhật nội dung, ảnh; giữ nguyên tiêu đề, slug và trạng thái đăng.',
+    ]);
+?>
 
 <a href="<?php echo base_url('admin/posts/add'); ?>" class="btn btn-success mb-3">Thêm mới bài viết</a>
 
@@ -38,6 +53,9 @@
                 </td>
                 <td class="text-start">
                     <strong><?php echo html_escape($item->title); ?></strong>
+                    <?php if (!empty($item->author_name)): ?>
+                        <br><small><i class="bi bi-person"></i> <?php echo html_escape($item->author_name); ?></small>
+                    <?php endif; ?>
                     <br><small class="text-muted"><?php echo html_escape((string) $item->slug); ?></small>
                 </td>
                 <td class="text-start small"><?php echo html_escape(mb_strimwidth(trim(preg_replace('/\s+/u', ' ', (string) $item->content)), 0, 140, '...', 'UTF-8')); ?></td>

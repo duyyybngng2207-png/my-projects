@@ -1,9 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php
+// [VIEW] Trang kết quả tìm kiếm /search?q=...&type=... - Search::index(). Biến: $q, $type (tab đang chọn), $items.
+?>
+<?php
 /** @var string $q */
 /** @var string $type */
 /** @var array $items */
-$labels = ['places' => 'Places', 'hotels' => 'Hotels', 'news' => 'News', 'categories' => 'Categories'];
+$labels = ['places' => 'Places', 'hotels' => 'Hotels', 'news' => 'News', 'countries' => 'Countries'];
 ?>
 
 <div class="home">
@@ -20,6 +23,7 @@ $labels = ['places' => 'Places', 'hotels' => 'Hotels', 'news' => 'News', 'catego
             <?php echo html_escape($labels[$type]); ?> results for "<?php echo html_escape($q); ?>"
         </h4>
 
+        <?php // 3 trường hợp: từ khoá quá ngắn / không có kết quả / có kết quả (lưới thẻ) ?>
         <?php if (mb_strlen($q) < 2): ?>
             <p>Please enter at least 2 characters.</p>
 
@@ -28,6 +32,7 @@ $labels = ['places' => 'Places', 'hotels' => 'Hotels', 'news' => 'News', 'catego
 
         <?php else: ?>
             <div class="row">
+                <?php // Mọi loại kết quả có cùng dạng {title, text, price, url, image} (Search::index đã chuẩn hoá) ?>
                 <?php foreach ($items as $it): ?>
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100">
@@ -39,6 +44,7 @@ $labels = ['places' => 'Places', 'hotels' => 'Hotels', 'news' => 'News', 'catego
                                 <?php if (!empty($it['text'])): ?>
                                     <p class="card-text"><?php echo html_escape($it['text']); ?></p>
                                 <?php endif; ?>
+                                <?php // Chỉ khách sạn có giá; loại khác price = null nên không hiện ?>
                                 <?php if ($it['price'] !== null): ?>
                                     <p class="card-text"><strong>Price: $<?php echo number_format($it['price']); ?></strong></p>
                                 <?php endif; ?>

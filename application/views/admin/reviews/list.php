@@ -1,4 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Danh sách đánh giá - Reviews::index(). Mỗi dòng có nút Duyệt / Bỏ duyệt (POST setApproval) và Xoá (POST deleteReview).
+// Chỉ đánh giá đã duyệt mới hiện ra trang công khai. Biến: $reviews_list, $pagination_links, $offset.
+?>
 <?php /** @var array $reviews_list */ /** @var string $pagination_links */ /** @var int $offset */ ?>
 
 <h2>Đánh giá của khách</h2>

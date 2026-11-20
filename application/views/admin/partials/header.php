@@ -1,4 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Phần đầu chung của MỌI trang admin: thẻ <head>, CSS (Bootstrap 5 / AdminLTE), menu bên trái, thanh trên cùng,
+// và khung hiện flash message (success / error). Controller admin gọi: load->view('admin/partials/header').
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,8 +20,10 @@
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
 <div class="app-wrapper">
 
+    <?php // ---- Thanh trên cùng: thông báo flash + menu tài khoản (đăng xuất) ---- ?>
     <nav class="app-header navbar navbar-expand bg-body">
         <div class="container-fluid">
+            <?php // Thông báo do controller đặt bằng set_flashdata() trước khi redirect, chỉ hiện đúng 1 lần ?>
             <?php if ($this->session->flashdata('success')): ?>
                 <div class="alert alert-success">
                     <?php echo $this->session->flashdata('success'); ?>
@@ -28,6 +34,7 @@
                     <?php echo $this->session->flashdata('error'); ?>
                 </div>
             <?php endif; ?>
+            <?php // Tên tài khoản lấy từ session (ghi lúc đăng nhập ở Login.php) ?>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -46,6 +53,7 @@
         </div>
     </nav>
 
+    <?php // ---- Menu bên trái: mỗi mục là 1 link tới trang admin (route khai báo trong config/routes.php) ---- ?>
     <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <div class="sidebar-brand">
             <a href="<?php echo base_url('admin'); ?>" class="brand-link">
@@ -55,6 +63,26 @@
         <div class="sidebar-wrapper">
             <nav class="mt-2">
                 <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" aria-label="Main navigation" data-accordion="false" id="navigation">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-globe"></i>
+                            <p>Châu lục & Quốc gia<i class="nav-arrow bi bi-chevron-right"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="<?php echo base_url('admin/continents'); ?>" class="nav-link">
+                                    <i class="nav-icon bi bi-circle"></i>
+                                    <p>Danh sách châu lục</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?php echo base_url('admin/countries'); ?>" class="nav-link">
+                                    <i class="nav-icon bi bi-circle"></i>
+                                    <p>Danh sách quốc gia</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon bi bi-box-seam-fill"></i>
@@ -112,6 +140,7 @@
         </div>
     </aside>
 
+    <?php // ---- Vùng nội dung: view của từng trang (vd admin/places/list) in tiếp vào đây, footer.php đóng thẻ ---- ?>
     <main class="app-main">
         <div class="app-content">
             <div class="container-fluid">

@@ -1,4 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+// [VIEW] Khối "Latest posts" ở sidebar trang tin tức / chi tiết bài viết. Biến: $latest_posts, $sidebar_title.
+?>
 <?php /** @var array $latest_posts */ ?>
 <?php $sidebar_title = isset($sidebar_title) ? $sidebar_title : 'Latest Posts'; ?>
 <?php if (!empty($latest_posts)): ?>

@@ -1,4 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); 
+// [VIEW] Phần đầu chung của MỌI trang công khai: <head>, CSS chung + CSS riêng của trang ($page_css), thanh trên cùng,
+// menu chính, ô tìm kiếm (gợi ý AJAX trong js/site.js) và menu mobile.
+// Controller gọi: load->view('site/partials/header', $data) - $data['page_css'] = danh sách file CSS riêng.
 ?>
 <?php /** @var array $places_list */ ?>
 <!DOCTYPE html>
@@ -19,7 +22,8 @@ $page_css = isset($page_css) ? $page_css : ['styles/main_styles.css', 'styles/re
 foreach ($page_css as $css): ?>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url($css); ?>">
 <?php endforeach; ?>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url('styles/site_custom.css'); ?>">
+<?php // ?v=<thời gian sửa file>: sửa CSS xong trình duyệt tự tải bản mới, không dùng bản cache cũ ?>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('styles/site_custom.css') . '?v=' . @filemtime(FCPATH . 'styles/site_custom.css'); ?>">
 </head>
 
 <body>
@@ -64,7 +68,7 @@ foreach ($page_css as $css): ?>
 						<div class="main_nav_container ml-auto">
 							<ul class="main_nav_list">
 								<li class="main_nav_item"><a href="<?php echo base_url(); ?>">home</a></li>
-								<li class="main_nav_item"><a href="<?php echo base_url(); ?>">about us</a></li>
+								<li class="main_nav_item"><a href="<?php echo base_url('about'); ?>">about us</a></li>
 								<li class="main_nav_item"><a href="<?php echo base_url('#offers'); ?>">offers</a></li>
     							<li class="main_nav_item"><a href="<?php echo base_url('news'); ?>">news</a></li>
 								<li class="main_nav_item"><a href="<?php echo base_url('contact'); ?>">contact</a></li>
@@ -115,10 +119,10 @@ foreach ($page_css as $css): ?>
 			<div class="logo menu_logo"><a href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>images/logo.png" alt=""></a></div>
 			<ul>
 				<li class="menu_item"><a href="<?php echo base_url(); ?>">home</a></li>
-				<li class="menu_item"><a href="<?php echo base_url(); ?>">about us</a></li>
+				<li class="menu_item"><a href="<?php echo base_url('about'); ?>">about us</a></li>
 				<li class="menu_item"><a href="<?php echo base_url('#offers'); ?>">offers</a></li>
     			<li class="menu_item"><a href="<?php echo base_url('news'); ?>">news</a></li>
-				<li class="menu_item"><a href="<?php echo base_url(); ?>">contact</a></li>
+				<li class="menu_item"><a href="<?php echo base_url('contact'); ?>">contact</a></li>
 			</ul>
 		</div>
 	</div>

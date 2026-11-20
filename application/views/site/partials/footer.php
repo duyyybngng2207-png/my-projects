@@ -1,9 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); 
+// [VIEW] Phần cuối chung của MỌI trang công khai: giới thiệu, 3 bài viết mới ($footer_posts), 12 quốc gia ($footer_countries),
+// thông tin liên hệ, rồi nạp JS chung + JS riêng của trang ($page_js) + js/site.js.
+// $footer_posts / $footer_countries được nạp sẵn ở Site_Controller (core/MY_Controller.php).
 ?>
 <?php /** @var array $places_list */ ?>
 <?php
 $footer_posts      = isset($footer_posts) ? $footer_posts : [];
-$footer_categories = isset($footer_categories) ? $footer_categories : [];
+$footer_countries  = isset($footer_countries) ? $footer_countries : [];
 ?>
 <footer class="footer">
     <div class="container">
@@ -56,11 +59,11 @@ $footer_categories = isset($footer_categories) ? $footer_categories : [];
             <!-- Footer Column -->
             <div class="col-lg-3 footer_column">
                 <div class="footer_col">
-                    <div class="footer_title">categories</div>
+                    <div class="footer_title">countries</div>
                     <div class="footer_content footer_tags">
                         <ul class="tags_list clearfix">
-                            <?php foreach ($footer_categories as $fc): ?>
-                                <li class="tag_item"><a href="<?php echo category_url($fc); ?>"><?php echo html_escape($fc->title); ?></a></li>
+                            <?php foreach ($footer_countries as $fc): ?>
+                                <li class="tag_item"><a href="<?php echo country_url($fc); ?>"><?php echo html_escape($fc->name); ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
